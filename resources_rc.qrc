@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/easyAHP" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
