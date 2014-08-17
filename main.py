@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Sun Aug 17 15:44:02 2014
+# Created: Sun Aug 17 20:13:08 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,7 +74,7 @@ class Ui_main(object):
 
     def retranslateUi(self, main):
         main.setWindowTitle(_translate("main", "Easy AHP", None))
-        self.label.setText(_translate("main", "EASY AHP", None))
+        self.label.setText(_translate("main", "Easy AHP", None))
         self.textBrowser.setHtml(_translate("main", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

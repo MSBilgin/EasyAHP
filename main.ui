@@ -33,7 +33,7 @@
     </font>
    </property>
    <property name="text">
-    <string>EASY AHP</string>
+    <string>Easy AHP</string>
    </property>
   </widget>
   <widget class="QTextBrowser" name="textBrowser">

@@ -27,7 +27,7 @@ The user-friendly interface makes analysis easier by dividing operations to diff
 </p>
 
 <p align="center">
-  <img src="https://lh6.googleusercontent.com/-35Syy_o5RrY/U_DfKNpWh_I/AAAAAAAAAns/qXKI37b_idM/w663-h553-no/Ads%C4%B1z%2B1.png" />
+  <img src="https://lh3.googleusercontent.com/-tuSjKJrq1Ro/U_Dj6vWf_cI/AAAAAAAAAog/cJxYXPeMqVA/w665-h553-no/git.png" />
 </p>
 
 
