@@ -21,7 +21,7 @@
     <rect>
      <x>220</x>
      <y>30</y>
-     <width>231</width>
+     <width>301</width>
      <height>61</height>
     </rect>
    </property>
@@ -69,9 +69,9 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>180</x>
      <y>80</y>
-     <width>241</width>
+     <width>401</width>
      <height>20</height>
     </rect>
    </property>
@@ -100,9 +100,9 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="nextBTN">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>334</x>
      <y>440</y>
-     <width>75</width>
+     <width>90</width>
      <height>23</height>
     </rect>
    </property>
@@ -115,7 +115,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>480</x>
      <y>440</y>
-     <width>75</width>
+     <width>90</width>
      <height>23</height>
     </rect>
    </property>
@@ -128,8 +128,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>50</x>
      <y>445</y>
-     <width>46</width>
-     <height>13</height>
+     <width>71</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -144,7 +144,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>500</x>
      <y>370</y>
-     <width>71</width>
+     <width>91</width>
      <height>16</height>
     </rect>
    </property>

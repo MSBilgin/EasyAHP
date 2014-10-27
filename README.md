@@ -1,4 +1,4 @@
-Easy AHP v0.7
+Easy AHP v0.8
 ==========
 
 
@@ -11,23 +11,30 @@ http://cbsuygulama.wordpress.com
 
 
 ###Description
-Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS. Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmetal resources etc.
+Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS. Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc.
 The user-friendly interface makes analysis easier by dividing operations to different steps.
 
 
 ###Features
    
-   - Analytic Hierarchy Process
+   - Analytic Hierarchy Process.
 
-   - Weighted Linear Combination
+   - Weighted Linear Combination.
 
-   - User-friendly UI. Step by step design
+   - User-friendly UI. Step by step design.
+   
+ 
+###Changelog
+	-v0.8-
+	Save & Load features were added.
+	GUI improved.
+	
 
 <p class="western"><br><br>
 </p>
 
 <p align="center">
-  <img src="https://lh3.googleusercontent.com/-tuSjKJrq1Ro/U_Dj6vWf_cI/AAAAAAAAAog/cJxYXPeMqVA/w665-h553-no/git.png" />
+  <img src="https://lh3.googleusercontent.com/-_wicH4l2A_s/VE6wCU107RI/AAAAAAAAAwA/d2EYjUYBbWg/w685-h553-no/v08.png" />
 </p>
 
 

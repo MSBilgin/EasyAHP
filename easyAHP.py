@@ -5,12 +5,12 @@
                                  A QGIS plugin
 
 Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS.
-Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmetal resources etc.
+Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc.
 The user-friendly interface makes analysis easier by dividing operations to different steps
 
                              -------------------
-        begin                : 2014-07-20
-        version              : 0.7
+        begin                : 2014-10-20
+        version              : 0.8
         copyright            : (C) 2014 by Mehmet Selim BILGIN
         email                : mselimbilgin@yahoo.com
         web                  : cbsuygulama.wordpress.com
@@ -33,13 +33,10 @@ import qgis
 import processing
 
 import resources_rc
-from mainDialog import *
-from step1Dialog import *
-from step2Dialog import *
-from step3Dialog import *
+from dialogs import *
 
-import os.path
 import sys
+import csv
 
 class easyAHP:
     """QGIS Plugin Implementation."""
@@ -192,8 +189,8 @@ class easyAHP:
         self.dlgStep1.setFixedSize(610, 475)
         self.dlgStep2.setFixedSize(610, 475)
         self.dlgStep3.setFixedSize(610, 475)
-        self.dlgStep2.ui.label_8.hide()
-        self.dlgStep3.ui.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.dlgStep2.label_8.hide()
+        self.dlgStep3.tableWidget.horizontalHeader().setStretchLastSection(True)
 
     def nextStep1(self):
         self.dlgMain.reject()
@@ -204,10 +201,10 @@ class easyAHP:
         self.dlgMain.show()
 
     def tableColumnList(self):
-        columnCount = self.dlgStep2.ui.tableWidget.columnCount()
+        columnCount = self.dlgStep2.tableWidget.columnCount()
         columnList = list()
         for i in range(columnCount):
-            columnList.append(self.dlgStep2.ui.tableWidget.horizontalHeaderItem(i).text())
+            columnList.append(self.dlgStep2.tableWidget.horizontalHeaderItem(i).text())
         if columnCount==0:
             return [] #returns blank list.
         else:
@@ -215,10 +212,10 @@ class easyAHP:
 
     def tableMaker(self):
         #preparing the pairwise table.
-        self.dlgStep2.ui.tableWidget.setRowCount(len(self.paramList))
-        self.dlgStep2.ui.tableWidget.setColumnCount(len(self.paramList))
+        self.dlgStep2.tableWidget.setRowCount(len(self.paramList))
+        self.dlgStep2.tableWidget.setColumnCount(len(self.paramList))
 
-        row = col = self.dlgStep1.ui.inputList.count() -1
+        row = col = self.dlgStep1.inputList.count() -1
         while row > -1:
             while col > -1:
                 if col == row:
@@ -229,38 +226,38 @@ class easyAHP:
                     cellItem.setText('1')
                     cellItem.setFlags(Qt.ItemIsEnabled)
                     cellItem.setTextAlignment(Qt.AlignCenter)
-                    self.dlgStep2.ui.tableWidget.setItem(col,row,cellItem)
+                    self.dlgStep2.tableWidget.setItem(col,row,cellItem)
 
                 col-=1
             row-=1
             col=row
 
     def nextStep2(self):
-        if self.dlgStep1.ui.inputList.count() > 15:
+        if self.dlgStep1.inputList.count() > 15:
             QMessageBox.information(None, 'Easy AHP', 'The number of layers can not be more than 15.')
 
-        elif self.dlgStep1.ui.inputList.count() > 2:
+        elif self.dlgStep1.inputList.count() > 2:
 
             #If input layers changed it affect to the pairwise table and clears it.
             self.paramList = list()
-            for i in range(self.dlgStep1.ui.inputList.count()):
-                self.paramList.append(self.dlgStep1.ui.inputList.item(i).text())
+            for i in range(self.dlgStep1.inputList.count()):
+                self.paramList.append(self.dlgStep1.inputList.item(i).text())
 
             if self.tableColumnList() == []:
                 #the table's initial generate.
                 self.tableMaker()
-                self.dlgStep2.ui.tableWidget.setHorizontalHeaderLabels(self.paramList)
-                self.dlgStep2.ui.tableWidget.setVerticalHeaderLabels(self.paramList)
-                self.dlgStep2.ui.tableWidget.resizeColumnsToContents()
+                self.dlgStep2.tableWidget.setHorizontalHeaderLabels(self.paramList)
+                self.dlgStep2.tableWidget.setVerticalHeaderLabels(self.paramList)
+                self.dlgStep2.tableWidget.resizeColumnsToContents()
 
 
             elif self.paramList != self.tableColumnList():
                 #The table is generated but after layers are changed so it clears it.
-                self.dlgStep2.ui.tableWidget.clear()
+                self.dlgStep2.tableWidget.clear()
                 self.tableMaker()
-                self.dlgStep2.ui.tableWidget.setHorizontalHeaderLabels(self.paramList)
-                self.dlgStep2.ui.tableWidget.setVerticalHeaderLabels(self.paramList)
-                self.dlgStep2.ui.tableWidget.resizeColumnsToContents()
+                self.dlgStep2.tableWidget.setHorizontalHeaderLabels(self.paramList)
+                self.dlgStep2.tableWidget.setVerticalHeaderLabels(self.paramList)
+                self.dlgStep2.tableWidget.resizeColumnsToContents()
 
             else:
                 #do nothing if input layers are not changed.
@@ -269,7 +266,7 @@ class easyAHP:
 
             #resizing column widht.
             for i in range(len(self.paramList)):
-                self.dlgStep2.ui.tableWidget.setColumnWidth(i,60)
+                self.dlgStep2.tableWidget.setColumnWidth(i,60)
 
             self.dlgStep1.reject()
             self.dlgStep2.show()
@@ -283,28 +280,28 @@ class easyAHP:
 
     def nextStep3(self):
         if not self.istableEdited:
-            self.dlgStep3.ui.tableWidget.setRowCount(len(self.paramList))
+            self.dlgStep3.tableWidget.setRowCount(len(self.paramList))
 
             for i in range(len(self.paramList)):
                 itemLayerName = QTableWidgetItem()
                 itemLayerName.setTextAlignment(Qt.AlignCenter)
                 itemLayerName.setText(self.paramList[i])
                 itemLayerName.setFlags(Qt.ItemIsEnabled)
-                self.dlgStep3.ui.tableWidget.setItem(i,0, itemLayerName)
+                self.dlgStep3.tableWidget.setItem(i,0, itemLayerName)
 
                 itemWeight= QTableWidgetItem()
                 itemWeight.setTextAlignment(Qt.AlignCenter)
                 itemWeight.setText(str(self.LAYER_WEIGHT_LIST[i]))
                 itemWeight.setFlags(Qt.ItemIsEnabled)
-                self.dlgStep3.ui.tableWidget.setItem(i,1, itemWeight)
+                self.dlgStep3.tableWidget.setItem(i,1, itemWeight)
 
             for i in range(len(self.paramList)):
-                self.dlgStep2.ui.tableWidget.setColumnWidth(i,60)
+                self.dlgStep2.tableWidget.setColumnWidth(i,60)
 
             self.dlgStep2.reject()
             self.dlgStep3.show()
         else:
-            QMessageBox.information(None, 'Easy AHP', 'You must calculate AHP Parameters before passing the next step.')
+            QMessageBox.information(None, 'Easy AHP', 'You must calculate AHP Indicators before passing the next step.')
 
     def backStep3(self):
         self.dlgStep3.reject()
@@ -328,57 +325,57 @@ class easyAHP:
 
     def addLayer(self):
         try:
-            currItem = self.dlgStep1.ui.qgisLayerList.currentItem()
-            self.dlgStep1.ui.qgisLayerList.takeItem(self.dlgStep1.ui.qgisLayerList.currentRow())
-            self.dlgStep1.ui.inputList.addItem(currItem.text())
+            currItem = self.dlgStep1.qgisLayerList.currentItem()
+            self.dlgStep1.qgisLayerList.takeItem(self.dlgStep1.qgisLayerList.currentRow())
+            self.dlgStep1.inputList.addItem(currItem.text())
         except:
             pass
 
     def removeLayer(self):
         try:
-            currItem = self.dlgStep1.ui.inputList.currentItem()
-            self.dlgStep1.ui.inputList.takeItem(self.dlgStep1.ui.inputList.currentRow())
-            self.dlgStep1.ui.qgisLayerList.addItem(currItem.text())
+            currItem = self.dlgStep1.inputList.currentItem()
+            self.dlgStep1.inputList.takeItem(self.dlgStep1.inputList.currentRow())
+            self.dlgStep1.qgisLayerList.addItem(currItem.text())
         except:
             pass
 
     def check(self):
-        self.istableEdited = True #this attibute is used for passing NEXT STEP. If it is True the user must re-calculate parameters.
+        self.istableEdited = True #this attibute is used for passing NEXT STEP. If it is True the user must re-calculate indicators.
         #Everything about the pairwise table (tableWidget) is handling in here.
 
         try:
-            self.dlgStep2.ui.tableWidget.currentItem().setTextAlignment(Qt.AlignCenter) #text alignment for pairwise table.
-            self.dlgStep2.ui.tableWidget.currentItem().setText(self.dlgStep2.ui.tableWidget.currentItem().text().replace(',' , '.')) #handling precise char (comma -> point)
+            self.dlgStep2.tableWidget.currentItem().setTextAlignment(Qt.AlignCenter) #text alignment for pairwise table.
+            self.dlgStep2.tableWidget.currentItem().setText(self.dlgStep2.tableWidget.currentItem().text().replace(',' , '.')) #handling precise char (comma -> point)
         except:
             pass
 
-        if self.dlgStep2.ui.tableWidget.currentItem() == None:
+        if self.dlgStep2.tableWidget.currentItem() == None:
             #clears the cross cell
             pass
 
-        elif self.dlgStep2.ui.tableWidget.currentItem().text()== '':
+        elif self.dlgStep2.tableWidget.currentItem().text()== '':
             #clears the cross cell
-            self.dlgStep2.ui.tableWidget.setItem(self.dlgStep2.ui.tableWidget.currentItem().column(), self.dlgStep2.ui.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
+            self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
 
         else:
-            if self.isNumeric(self.dlgStep2.ui.tableWidget.currentItem().text()): #checking the cell is numeric or not
+            if self.isNumeric(self.dlgStep2.tableWidget.currentItem().text()): #checking the cell is numeric or not
 
-                if float(self.dlgStep2.ui.tableWidget.currentItem().text()) > 9 or float(self.dlgStep2.ui.tableWidget.currentItem().text()) < 0.111:
+                if float(self.dlgStep2.tableWidget.currentItem().text()) > 9 or float(self.dlgStep2.tableWidget.currentItem().text()) < 0.111:
                     QtGui.QMessageBox.information(None,'Easy AHP', 'Your value cannot be greater than 9 and less than 0.1111')
-                    self.dlgStep2.ui.tableWidget.currentItem().setText('')
+                    self.dlgStep2.tableWidget.currentItem().setText('')
                     #clears the cross cell
-                    self.dlgStep2.ui.tableWidget.setItem(self.dlgStep2.ui.tableWidget.currentItem().column(), self.dlgStep2.ui.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
+                    self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
 
                 else:
                     #numeric values is rounding in here.
-                    numericvalue = str(round(float(self.dlgStep2.ui.tableWidget.currentItem().text()),3))
-                    self.dlgStep2.ui.tableWidget.currentItem().setText(numericvalue)
+                    numericvalue = str(round(float(self.dlgStep2.tableWidget.currentItem().text()),3))
+                    self.dlgStep2.tableWidget.currentItem().setText(numericvalue)
                     self.crossFill()
 
             else:
                 QtGui.QMessageBox.information(None,'Easy AHP', 'Please enter a numeric value.')
-                self.dlgStep2.ui.tableWidget.currentItem().setText('')
-                self.dlgStep2.ui.tableWidget.setItem(self.dlgStep2.ui.tableWidget.currentItem().column(), self.dlgStep2.ui.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
+                self.dlgStep2.tableWidget.currentItem().setText('')
+                self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
 
     def isNumeric(self,inputListValue):
         #checking for cell input value is numeric or not.
@@ -389,9 +386,9 @@ class easyAHP:
         return True
 
     def crossFill(self):
-        self.dlgStep2.ui.tableWidget.blockSignals(True) #disabling signals before updating table.
+        self.dlgStep2.tableWidget.blockSignals(True) #disabling signals before updating table.
         #Filling cross cell
-        normalValue = float(self.dlgStep2.ui.tableWidget.currentItem().text())
+        normalValue = float(self.dlgStep2.tableWidget.currentItem().text())
         reverseValue = round((1/normalValue),3)
 
         if reverseValue > 9: #1/9 = 0.11111111 but 1/0.11111111 > 9 so this problem is handling in here.
@@ -400,18 +397,18 @@ class easyAHP:
         reverveItem = QtGui.QTableWidgetItem()
         reverveItem.setTextAlignment(Qt.AlignCenter)
         reverveItem.setText(str(reverseValue))
-        self.dlgStep2.ui.tableWidget.setItem(self.dlgStep2.ui.tableWidget.currentItem().column(), self.dlgStep2.ui.tableWidget.currentItem().row(), reverveItem)
-        self.dlgStep2.ui.tableWidget.blockSignals(False) #enabling signals.
+        self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), reverveItem)
+        self.dlgStep2.tableWidget.blockSignals(False) #enabling signals.
 
     def isTableCompleted(self):
         #checking the table for containing any blank cell.
         row = col = 0
         control = 0
-        tableSize = self.dlgStep2.ui.tableWidget.columnCount()
+        tableSize = self.dlgStep2.tableWidget.columnCount()
         while row < tableSize:
             while col < tableSize:
                 try:
-                    if not self.dlgStep2.ui.tableWidget.item(row,col).text():
+                    if not self.dlgStep2.tableWidget.item(row,col).text():
                         control+=1
                 except:
                     control+=1
@@ -432,14 +429,14 @@ class easyAHP:
 
     def columnAddition(self):
         #Sums QtableWidget columns and inserting into columnSum list.
-        columnCount = self.dlgStep2.ui.tableWidget.columnCount()-1
+        columnCount = self.dlgStep2.tableWidget.columnCount()-1
         columnSum = list()
 
         while columnCount> -1:
             sum = float()
-            counter = self.dlgStep2.ui.tableWidget.columnCount()-1
+            counter = self.dlgStep2.tableWidget.columnCount()-1
             while counter > -1:
-                sum+= float(self.dlgStep2.ui.tableWidget.item(counter,columnCount).text())
+                sum+= float(self.dlgStep2.tableWidget.item(counter,columnCount).text())
                 counter-=1
             columnSum.append(sum)
             columnCount-=1
@@ -448,12 +445,12 @@ class easyAHP:
 
     def matrixNormalizer(self, sumOfColumns):
         normalizedMatrix = list()
-        columnCount = self.dlgStep2.ui.tableWidget.columnCount()-1
+        columnCount = self.dlgStep2.tableWidget.columnCount()-1
         while columnCount> -1:
             numberList = list()
-            counter = self.dlgStep2.ui.tableWidget.columnCount()-1
+            counter = self.dlgStep2.tableWidget.columnCount()-1
             while counter > -1:
-                divided = round(float(self.dlgStep2.ui.tableWidget.item(counter,columnCount).text()) / sumOfColumns[columnCount],3)
+                divided = round(float(self.dlgStep2.tableWidget.item(counter,columnCount).text()) / sumOfColumns[columnCount],3)
                 numberList.append(divided)
                 counter-=1
             normalizedMatrix.extend([numberList])
@@ -481,20 +478,20 @@ class easyAHP:
         while row < listLen:
             sum = float()
             while col < listLen:
-                sum += round(float(self.dlgStep2.ui.tableWidget.item(row,col).text()) * layerWeightList[col] , 3)
+                sum += round(float(self.dlgStep2.tableWidget.item(row,col).text()) * layerWeightList[col] , 3)
                 col += 1
             lambdaSum += round(sum / layerWeightList[row] , 3)
             row += 1
             col = 0
         lambdaValue = round(lambdaSum / listLen , 3)
-        self.dlgStep2.ui.label_5.setText(str(lambdaValue))
+        self.dlgStep2.label_5.setText(str(lambdaValue))
         return lambdaValue
 
     def conIndex(self, lambdaValue, layerWeightList):
         #consistency index calculations.
         criteriaNumber = len(layerWeightList)
         ci = round((lambdaValue - criteriaNumber) / (criteriaNumber-1) , 3)
-        self.dlgStep2.ui.label_6.setText(str(ci))
+        self.dlgStep2.label_6.setText(str(ci))
         return ci
 
     def conRatio(self,consistencyIndex, numberOfLayers):
@@ -502,11 +499,11 @@ class easyAHP:
                             8:1.41 , 9:1.45 , 10:1.49 , 11:1.51 , 12:1.48 , 13:1.56 , 14:1.57 , 15:1.59}
 
         cr = round(consistencyIndex / randomConsIndex[numberOfLayers] , 3)
-        self.dlgStep2.ui.label_7.setText(str(cr))
+        self.dlgStep2.label_7.setText(str(cr))
         if cr >= 0.1:
-            self.dlgStep2.ui.label_8.show()
+            self.dlgStep2.label_8.show()
         else:
-            self.dlgStep2.ui.label_8.hide()
+            self.dlgStep2.label_8.hide()
         return cr
 
     def ahpCalculator(self):
@@ -517,13 +514,23 @@ class easyAHP:
         CONSISTENCY_RATIO = self.conRatio(CONSISTENCY_INDEX, len(self.LAYER_WEIGHT_LIST))
 
     def browse(self):
-        fileLocation = QFileDialog.getSaveFileName(None, "Save Output File", self.dlgStep3.ui.lineEdit.text(), "GeoTIFF file (*.tif)")
+        fileLocation = QFileDialog.getSaveFileName(None, "Save Output File", self.dlgStep3.lineEdit.text(), "GeoTIFF file (*.tif)")
         if fileLocation:
-            self.dlgStep3.ui.lineEdit.setText(fileLocation)
+            #If the output file has no extension it considered as TIFF file.
+            if not os.path.splitext(fileLocation)[1]:
+                outputFile =  os.path.splitext(fileLocation)[0] + '.tif'
+
+            elif os.path.splitext(fileLocation)[1] != '.tif':
+                outputFile =  os.path.splitext(fileLocation)[0] + '.tif'
+
+            else:
+                outputFile = fileLocation
+
+            self.dlgStep3.lineEdit.setText(outputFile)
 
     def wlcProcessing(self):
-        if self.dlgStep3.ui.lineEdit.text() == '':
-            QMessageBox.information(None, 'Easy AHP', 'You must specify output folder.')
+        if self.dlgStep3.lineEdit.text() == '':
+            QMessageBox.information(None, 'Easy AHP', 'You must specify the output folder.')
         else:
             expression = list() #the expression for SAGA Raster Calculator.
             files = list() #files for SAGA Raster Calculator.
@@ -536,11 +543,78 @@ class easyAHP:
                     if self.paramList[i] == j[1].name():
                         files.append(j[1].source())
 
-            savePath = self.dlgStep3.ui.lineEdit.text().encode('utf-8')
-            processing.runalg("saga:rastercalculator", ';'.join(files), '+'.join(expression), savePath)
+            savePath = self.dlgStep3.lineEdit.text().encode('utf-8')
 
-            qgis.utils.iface.addRasterLayer(self.dlgStep3.ui.lineEdit.text(), os.path.splitext(os.path.basename(savePath))[0]) #adding the result to QGIS canvas.
-            QMessageBox.information(None, 'Easy AHP', 'Calculation succesfully completed and the result was added into QGIS Canvas.')
+            output = processing.runalg("saga:rastercalculator", ';'.join(files), '+'.join(expression), savePath)
+
+            #Checking if SAGA is installed.
+            if output:
+                qgis.utils.iface.addRasterLayer(self.dlgStep3.lineEdit.text(), os.path.splitext(os.path.basename(savePath))[0]) #adding the result to QGIS canvas.
+                QMessageBox.information(None, 'Easy AHP', 'Calculation succesfully completed and the result was added into QGIS Canvas.')
+            else:
+                QMessageBox.information(None, 'Easy AHP', "An error occured during the calculation. Please make sure that Processing Toolbox's SAGA provider is installed.")
+
+    def saveTable(self):
+        #Saving the pairwise table.
+        if not self.istableEdited:
+            saveDlg = QFileDialog.getSaveFileName(None, 'Save Table', '.', 'CSV file (*.csv)')
+
+            if saveDlg:
+                if not os.path.splitext(saveDlg)[1]:
+                    saveDlg += '.csv'
+
+                tableSize = self.dlgStep2.tableWidget.columnCount()
+
+                try:
+                    csvOutput = open(saveDlg, 'w')
+                    writer = csv.writer(csvOutput, delimiter=';')
+
+                    for i in range(int(tableSize)):
+                        tempList = list()
+                        for j in range(int(tableSize)):
+                            tempList.append(self.dlgStep2.tableWidget.item(i,j).text())
+                        writer.writerow(tempList)
+                    csvOutput.close()
+                    QMessageBox.information(None, 'Easy AHP', 'The pairwise table has been successfully saved.')
+
+                except Exception as saveError:
+                    QMessageBox.critical(None, 'EasyAHP', str(saveError))
+
+        else:
+            QMessageBox.information(None, 'Easy AHP', 'You must calculate AHP Indicators to save the table.')
+
+
+    def loadTable(self):
+        #Loading the pairwise table.
+        loadDlg = QFileDialog.getOpenFileName(None, 'Load Table', '.', 'CSV file (*.csv)')
+
+        if loadDlg:
+            self.dlgStep2.tableWidget.blockSignals(True)
+            try:
+
+                with open(loadDlg, 'r') as csvFile:
+                	reader  =csv.reader(csvFile, delimiter=';')
+                	csvList = list()
+                	for i in reader:
+                		csvList.append(i)
+
+                if self.dlgStep2.tableWidget.rowCount() == len(csvList):
+                    for i in range(len(csvList)):
+                        for j in range(len(csvList)):
+                            cellItem = QtGui.QTableWidgetItem()
+                            cellItem.setText(csvList[i][j])
+                            self.dlgStep2.tableWidget.setItem(i,j,cellItem)
+                    self.tableMaker() #preparing the table structure.
+
+                else:
+                    QMessageBox.critical(None, 'Easy AHP', 'The pairwise table size and the loaded table size are not compatible.')
+
+            except Exception as loadError:
+                    QMessageBox.critical(None, 'EasyAHP', str(loadError))
+
+            self.dlgStep2.tableWidget.blockSignals(False)
+
+
 
     def run(self):
         self.dlgStep1 = step1Dialog()
@@ -552,39 +626,40 @@ class easyAHP:
 
         #QGIS raster layers adding into QLayerWidget (availables)
         self.allMapLayers = qgis.core.QgsMapLayerRegistry.instance().mapLayers().items()
-        self.dlgStep1.ui.qgisLayerList.clear()
+        self.dlgStep1.qgisLayerList.clear()
 
         #I used try-except block for vector layers. Beacuse they have no method named "rasterType".
         for (notImportantForNow, layerObj) in self.allMapLayers:
             try:
     			if layerObj.rasterType() == 0:
-    				self.dlgStep1.ui.qgisLayerList.addItem(layerObj.name())
+    				self.dlgStep1.qgisLayerList.addItem(layerObj.name())
             except:
                 pass
 
         #Main dialog connections
-        self.dlgMain.ui.nextBTN.clicked.connect(self.nextStep1)
-        self.dlgMain.ui.cancelBTN.clicked.connect(self.cancel)
+        self.dlgMain.nextBTN.clicked.connect(self.nextStep1)
+        self.dlgMain.cancelBTN.clicked.connect(self.cancel)
 
         #Step1 dialog connections
-        self.dlgStep1.ui.backBTN.clicked.connect(self.backStep1)
-        self.dlgStep1.ui.cancelBTN.clicked.connect(self.cancel)
-        self.dlgStep1.ui.addLayerBTN.clicked.connect(self.addLayer)
-        self.dlgStep1.ui.removeLayerBTN.clicked.connect(self.removeLayer)
-        self.dlgStep1.ui.nextBTN.clicked.connect(self.nextStep2)
+        self.dlgStep1.backBTN.clicked.connect(self.backStep1)
+        self.dlgStep1.cancelBTN.clicked.connect(self.cancel)
+        self.dlgStep1.addLayerBTN.clicked.connect(self.addLayer)
+        self.dlgStep1.removeLayerBTN.clicked.connect(self.removeLayer)
+        self.dlgStep1.nextBTN.clicked.connect(self.nextStep2)
 
         #Step2 dialog connections
-        self.dlgStep2.ui.backBTN.clicked.connect(self.backStep2)
-        self.dlgStep2.ui.tableWidget.itemChanged.connect(self.check)
-        self.dlgStep2.ui.calcBTN.clicked.connect(self.parameterCalculator)
-        self.dlgStep2.ui.nextBTN.clicked.connect(self.nextStep3)
-        self.dlgStep2.ui.cancelBTN.clicked.connect(self.cancel)
+        self.dlgStep2.backBTN.clicked.connect(self.backStep2)
+        self.dlgStep2.tableWidget.itemChanged.connect(self.check)
+        self.dlgStep2.calcBTN.clicked.connect(self.parameterCalculator)
+        self.dlgStep2.nextBTN.clicked.connect(self.nextStep3)
+        self.dlgStep2.cancelBTN.clicked.connect(self.cancel)
+        self.dlgStep2.saveBTN.clicked.connect(self.saveTable)
+        self.dlgStep2.loadBTN.clicked.connect(self.loadTable)
 
         #Step3 dialog connections
-        self.dlgStep3.ui.backBTN.clicked.connect(self.backStep3)
-        self.dlgStep3.ui.exitBTN.clicked.connect(self.cancel)
-        self.dlgStep3.ui.browseBTN.clicked.connect(self.browse)
-        self.dlgStep3.ui.runBTN.clicked.connect(self.wlcProcessing)
+        self.dlgStep3.backBTN.clicked.connect(self.backStep3)
+        self.dlgStep3.exitBTN.clicked.connect(self.cancel)
+        self.dlgStep3.browseBTN.clicked.connect(self.browse)
+        self.dlgStep3.runBTN.clicked.connect(self.wlcProcessing)
 
         self.dlgMain.show()
-        self.dlgMain.exec_()
