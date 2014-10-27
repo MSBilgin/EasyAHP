@@ -27,8 +27,7 @@ The user-friendly interface makes analysis easier by dividing operations to diff
 ###Changelog
 	-v0.8-
 	Save & Load features were added.
-	GUI improved.
-	
+	GUI improved.	
 
 <p class="western"><br><br>
 </p>
