@@ -9,9 +9,9 @@ Target audience is decision makers that work on suitability analysis for land us
 The user-friendly interface makes analysis easier by dividing operations to different steps
 
                              -------------------
-        begin                : 2014-10-20
-        version              : 0.8
-        copyright            : (C) 2014 by Mehmet Selim BILGIN
+        begin                : 2015-06-14
+        version              : 0.9
+        copyright            : (C) 2015 by Mehmet Selim BILGIN
         email                : mselimbilgin@yahoo.com
         web                  : cbsuygulama.wordpress.com
         git sha              : $Format:%H$
@@ -543,9 +543,11 @@ class easyAHP:
                     if self.paramList[i] == j[1].name():
                         files.append(j[1].source())
 
+
             savePath = self.dlgStep3.lineEdit.text().encode('utf-8')
 
-            output = processing.runalg("saga:rastercalculator", ';'.join(files), '+'.join(expression), savePath)
+
+            output = processing.runalg("saga:rastercalculator", files[0], ';'.join(files[1:]), '+'.join(expression), savePath)
 
             #Checking if SAGA is installed.
             if output:
