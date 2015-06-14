@@ -9,7 +9,7 @@
 [general]
 name=Easy AHP
 qgisMinimumVersion=2.8
-description=Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS. T
+description=Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS.
 version=1.0
 author=Mehmet Selim BILGIN
 email=mselimbilgin@yahoo.com
