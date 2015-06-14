@@ -1,8 +1,8 @@
-Easy AHP v0.8
+Easy AHP v1.0
 ==========
 
 
-(C) 2014 by Mehmet Selim BILGIN
+(C) 2015 by Mehmet Selim BILGIN
 
 mselimbilgin [at] yahoo.com
 
@@ -25,9 +25,16 @@ The user-friendly interface makes analysis easier by dividing operations to diff
    
  
 ###Changelog
+	-v1.0-
+	Processing Toolbox (SAGA) API incompability fixed.
+		
+	-v0.9-
+	Processing Toolbox (SAGA) API incompability fixed.
+		
 	-v0.8-
 	Save & Load features were added.
-	GUI improved.	
+	GUI improved.
+	
 
 <p class="western"><br><br>
 </p>
