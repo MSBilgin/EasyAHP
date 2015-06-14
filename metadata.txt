@@ -9,12 +9,12 @@
 [general]
 name=Easy AHP
 qgisMinimumVersion=2.8
-description=Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS. Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc. The user-friendly interface makes analysis easier by dividing operations to different steps
+description=Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS. T
 version=1.0
 author=Mehmet Selim BILGIN
 email=mselimbilgin@yahoo.com
 about=Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc. The user-friendly interface makes analysis easier by dividing operations to different steps.
-about=Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc. The user-friendly interface makes analysis easier by dividing operations to different steps.
+
 
 # End of mandatory metadata
 
