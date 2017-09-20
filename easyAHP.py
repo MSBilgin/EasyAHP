@@ -539,9 +539,9 @@ class easyAHP:
             #formulating the expression.
             for i in range(len(self.paramList)):
                 expression.append(itemAlpha[i] + '*' + str(self.LAYER_WEIGHT_LIST[i]))
-                for j in self.allMapLayers:
-                    if self.paramList[i] == j[1].name():
-                        files.append(j[1].source())
+                for j in self.rasterLayers:
+                    if self.paramList[i] == j.name():
+                        files.append(j.source())
 
 
             savePath = self.dlgStep3.lineEdit.text().encode('utf-8')
@@ -595,10 +595,10 @@ class easyAHP:
             try:
 
                 with open(loadDlg, 'r') as csvFile:
-                	reader  =csv.reader(csvFile, delimiter=';')
-                	csvList = list()
-                	for i in reader:
-                		csvList.append(i)
+                    reader  =csv.reader(csvFile, delimiter=';')
+                    csvList = list()
+                    for i in reader:
+                        csvList.append(i)
 
                 if self.dlgStep2.tableWidget.rowCount() == len(csvList):
                     for i in range(len(csvList)):
@@ -626,17 +626,14 @@ class easyAHP:
 
         self.uiSettings()
 
-        #QGIS raster layers adding into QLayerWidget (availables)
-        self.allMapLayers = qgis.core.QgsMapLayerRegistry.instance().mapLayers().items()
         self.dlgStep1.qgisLayerList.clear()
 
-        #I used try-except block for vector layers. Beacuse they have no method named "rasterType".
-        for (notImportantForNow, layerObj) in self.allMapLayers:
-            try:
-    			if layerObj.rasterType() == 0:
-    				self.dlgStep1.qgisLayerList.addItem(layerObj.name())
-            except:
-                pass
+        #QGIS raster layers adding into QLayerWidget (availables)
+        self.rasterLayers = []
+        for layer in qgis.core.QgsMapLayerRegistry.instance().mapLayers().values():
+            if layer.type() == 1:
+                self.rasterLayers.append(layer)
+                self.dlgStep1.qgisLayerList.addItem(layer.name())
 
         #Main dialog connections
         self.dlgMain.nextBTN.clicked.connect(self.nextStep1)
