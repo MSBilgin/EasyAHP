@@ -26,29 +26,22 @@ The user-friendly interface makes analysis easier by dividing operations to diff
  *                                                                         *
  ***************************************************************************/
 """
-from __future__ import absolute_import
 #from PyQt4.QtCore import *
 	
-from builtins import str
-from builtins import range
-from builtins import object
-#from qgis.PyQt.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QVariant, Qt
+from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, QVariant, Qt
 #from PyQt4.QtGui import *
-#from qgis.PyQt.QtWidgets import QTableWidgetItem, QMessageBox, QTableWidgetItem, QDialog, QDialogButtonBox
-#from qgis.PyQt.QtGui import QBrush, QColor, QIcon
-from qgis.PyQt.QtCore import *
-from qgis.PyQt.QtGui import *
-from qgis.PyQt.QtWidgets import *
+from PyQt4.QtGui import QTableWidgetItem, QBrush, QColor, QMessageBox,QTableWidgetItem 
+
 import qgis
 import processing
 
-from . import resources_rc
-from .dialogs import *
+import resources_rc
+from dialogs import *
 
 import sys
 import csv
 
-class easyAHP(object):
+class easyAHP:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface):
@@ -319,9 +312,9 @@ class easyAHP(object):
 
     def cancel(self):
         quit_msg = "Are you sure you want to exit?"
-        reply = QMessageBox.question(None, 'Easy AHP', quit_msg, QMessageBox.Yes, QMessageBox.No)
+        reply = QMessageBox.question(None, 'Easy AHP', quit_msg, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
 
-        if reply == QMessageBox.Yes:
+        if reply == QtGui.QMessageBox.Yes:
             try:
                 self.dlgMain.reject()
                 self.dlgStep1.reject()
@@ -371,7 +364,7 @@ class easyAHP(object):
             if self.isNumeric(self.dlgStep2.tableWidget.currentItem().text()): #checking the cell is numeric or not
 
                 if float(self.dlgStep2.tableWidget.currentItem().text()) > 9 or float(self.dlgStep2.tableWidget.currentItem().text()) < 0.111:
-                    QMessageBox.information(None,'Easy AHP', 'Your value cannot be greater than 9 and less than 0.1111')
+                    QtGui.QMessageBox.information(None,'Easy AHP', 'Your value cannot be greater than 9 and less than 0.1111')
                     self.dlgStep2.tableWidget.currentItem().setText('')
                     #clears the cross cell
                     self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
@@ -383,7 +376,7 @@ class easyAHP(object):
                     self.crossFill()
 
             else:
-                QMessageBox.information(None,'Easy AHP', 'Please enter a numeric value.')
+                QtGui.QMessageBox.information(None,'Easy AHP', 'Please enter a numeric value.')
                 self.dlgStep2.tableWidget.currentItem().setText('')
                 self.dlgStep2.tableWidget.setItem(self.dlgStep2.tableWidget.currentItem().column(), self.dlgStep2.tableWidget.currentItem().row(), QtGui.QTableWidgetItem(''))
 
@@ -524,7 +517,7 @@ class easyAHP(object):
         CONSISTENCY_RATIO = self.conRatio(CONSISTENCY_INDEX, len(self.LAYER_WEIGHT_LIST))
 
     def browse(self):
-        fileLocation, __, __ = QFileDialog.getSaveFileName(None, "Save Output File", self.dlgStep3.lineEdit.text(), "GeoTIFF file (*.tif)")
+        fileLocation = QFileDialog.getSaveFileName(None, "Save Output File", self.dlgStep3.lineEdit.text(), "GeoTIFF file (*.tif)")
         if fileLocation:
             #If the output file has no extension it considered as TIFF file.
             if not os.path.splitext(fileLocation)[1]:
@@ -569,7 +562,7 @@ class easyAHP(object):
     def saveTable(self):
         #Saving the pairwise table.
         if not self.istableEdited:
-            saveDlg, __, __ = QFileDialog.getSaveFileName(None, 'Save Table', '.', 'CSV file (*.csv)')
+            saveDlg = QFileDialog.getSaveFileName(None, 'Save Table', '.', 'CSV file (*.csv)')
 
             if saveDlg:
                 if not os.path.splitext(saveDlg)[1]:
@@ -598,7 +591,7 @@ class easyAHP(object):
 
     def loadTable(self):
         #Loading the pairwise table.
-        loadDlg, __, __ = QFileDialog.getOpenFileName(None, 'Load Table', '.', 'CSV file (*.csv)')
+        loadDlg = QFileDialog.getOpenFileName(None, 'Load Table', '.', 'CSV file (*.csv)')
 
         if loadDlg:
             self.dlgStep2.tableWidget.blockSignals(True)
@@ -637,15 +630,14 @@ class easyAHP(object):
         self.uiSettings()
 
         #QGIS raster layers adding into QLayerWidget (availables)
-        #self.allMapLayers = list(qgis.core.QgsMapLayerRegistry.instance().mapLayers().items())
-        self.allMapLayers = list(qgis.core.QgsProject.instance().mapLayers().items())
+        self.allMapLayers = qgis.core.QgsMapLayerRegistry.instance().mapLayers().items()
         self.dlgStep1.qgisLayerList.clear()
 
         #I used try-except block for vector layers. Beacuse they have no method named "rasterType".
         for (notImportantForNow, layerObj) in self.allMapLayers:
             try:
-                if layerObj.rasterType() == 0:
-                    self.dlgStep1.qgisLayerList.addItem(layerObj.name())
+    			if layerObj.rasterType() == 0:
+    				self.dlgStep1.qgisLayerList.addItem(layerObj.name())
             except:
                 pass
 
