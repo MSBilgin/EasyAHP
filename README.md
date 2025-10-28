@@ -1,8 +1,8 @@
-Easy AHP v1.0
+Easy AHP v1.0.11
 ==========
 
 
-(C) 2015 by Mehmet Selim BILGIN & 2025 Hemed Lungo
+(C) 2015 by Mehmet Selim BILGIN
 
 mselimbilgin [at] yahoo.com
 
