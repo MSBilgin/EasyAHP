@@ -17,7 +17,11 @@ about= Target audience is decision makers that work on suitability analysis for 
 # Optional items:
 
 # Uncomment the following line and add your changelog:
-changelog=	-v1.0-
+changelog=	
+			-v1.1.11
+			QGIS 3 compatibility (thanks to Hemed Lungo)
+
+			-v1.0-
 			Processing Toolbox (SAGA) API incompatibility fixed.
 
 
