@@ -1,4 +1,4 @@
-Easy AHP v1.1
+Easy AHP v1.0
 ==========
 
 

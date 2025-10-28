@@ -28,33 +28,39 @@ The user-friendly interface makes analysis easier by dividing operations to diff
 """
 
 import os
-from qgis.PyQt import QtGui, uic
-from qgis.PyQt.QtWidgets import QDialog, QDialogButtonBox
-
+from qgis.PyQt import QtGui, QtWidgets, uic
+# Compatibility shims for QGIS 3 / PyQt5
+try:
+    from qgis.PyQt import QtWidgets as _QtWidgets
+    for _n in ['QDialog','QFileDialog','QMessageBox','QTableWidgetItem']:
+        if hasattr(_QtWidgets, _n):
+            setattr(QtGui, _n, getattr(_QtWidgets, _n))
+except Exception:
+    pass
 
 mainFormClass, notImportant = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'main.ui'))
 step1FormClass, notImportant = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'step1.ui'))
 step2FormClass, notImportant = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'step2.ui'))
 step3FormClass, notImportant = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'step3.ui'))
 
-class mainDialog(QDialog, mainFormClass):
+class mainDialog(QtGui.QDialog, mainFormClass):
     def __init__(self):
-        QDialog.__init__(self)
+        QtGui.QDialog.__init__(self)
         self.setupUi(self)
 
-class step1Dialog(QDialog, step1FormClass):
+class step1Dialog(QtGui.QDialog, step1FormClass):
     def __init__(self):
-        QDialog.__init__(self)
+        QtGui.QDialog.__init__(self)
         self.setupUi(self)
 
-class step2Dialog(QDialog, step2FormClass):
+class step2Dialog(QtGui.QDialog, step2FormClass):
     def __init__(self):
-        QDialog.__init__(self)
+        QtGui.QDialog.__init__(self)
         self.setupUi(self)
 
-class step3Dialog(QDialog, step3FormClass):
+class step3Dialog(QtGui.QDialog, step3FormClass):
     def __init__(self):
-        QDialog.__init__(self)
+        QtGui.QDialog.__init__(self)
         self.setupUi(self)
 
 

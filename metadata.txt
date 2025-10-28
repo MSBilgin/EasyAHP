@@ -1,8 +1,6 @@
 # This file contains metadata for your plugin. Since 
-# version 2.0 of QGIS this is the proper way to supply 
 # information about a plugin. The old method of 
 # embedding metadata in __init__.py will 
-# is no longer supported since version 2.0.
 
 # This file should be included when you package your plugin.# Mandatory items:
 
@@ -10,9 +8,9 @@
 name=Easy AHP
 qgisMinimumVersion=3.0
 description=Easy AHP provides Analytic Hierarchy Process (AHP) and Weighted Linear Combination (WLC) analysis in QGIS.
-version=1.0
+version=1.0.11
 author=Mehmet Selim BILGIN
-email=mselimbilgin@yahoo.com
+email=mselimbilgin@yahoo.com & Hemed Lungo (2025)
 about= Target audience is decision makers that work on suitability analysis for land use, agriculture, disaster management, environmental resources etc. The user-friendly interface makes analysis easier by dividing operations to different steps.
 # End of mandatory metadata
 
