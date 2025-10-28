@@ -27,7 +27,7 @@ The user-friendly interface makes analysis easier by dividing operations to diff
 ###Changelog
 
 	-v1.0.11-
-	QGIS 3 compatible
+	QGIS 3 compatible (thanks to Hemed Lungo)
 	
 	-v1.0-
 	Processing Toolbox (SAGA) API incompability fixed.
