@@ -2,7 +2,7 @@ Easy AHP v1.0
 ==========
 
 
-(C) 2015 by Mehmet Selim BILGIN
+(C) 2015 by Mehmet Selim BILGIN & 2025 Hemed Lungo
 
 mselimbilgin [at] yahoo.com
 
@@ -25,6 +25,9 @@ The user-friendly interface makes analysis easier by dividing operations to diff
    
  
 ###Changelog
+	-v1.0.11
+	QGIS 3 compatible
+	
 	-v1.0-
 	Processing Toolbox (SAGA) API incompability fixed.
 		
