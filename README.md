@@ -25,6 +25,7 @@ The user-friendly interface makes analysis easier by dividing operations to diff
    
  
 ###Changelog
+
 	-v1.0.11-
 	QGIS 3 compatible
 	
